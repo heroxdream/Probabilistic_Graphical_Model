@@ -39,7 +39,11 @@ for i = 1:size(E, 1),
             % Hint: You might find it helpful to use IndexToAssignment
             %       and SetValueOfAssignment
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            assignment = IndexToAssignment(1:prod(F(j).card), F(j).card);
             
+            observed_assignment = assignment(assignment(:, indx) == v, :);
+            observed_values = repmat(0, length(observed_assignment), 1);
+            F(j) = SetValueOfAssignment(F(j), observed_assignment, observed_values);
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 				% Check validity of evidence / resulting factor
