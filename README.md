@@ -1,2 +1,3 @@
 # Probabilistic_Graphical_Model
-Standford_PGM
+Coursera Standford_PGM Part1:
+Representation
