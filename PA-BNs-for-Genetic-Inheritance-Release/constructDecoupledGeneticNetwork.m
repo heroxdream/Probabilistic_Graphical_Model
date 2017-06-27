@@ -69,9 +69,6 @@ numPeople = length(pedigree.names);
 % not matter.
 factorList(3*numPeople) = struct('var', [], 'card', [], 'val', []);
 
-% Initialize factors
-factorList(3*numPeople) = struct('var', [], 'card', [], 'val', []);
-
 numAlleles = length(alleleFreqs); % Number of alleles
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,5 +78,29 @@ numAlleles = length(alleleFreqs); % Number of alleles
 % numPeople+1 - 2*numPeople: second parent copy of gene variables
 % 2*numPeople+1 - 3*numPeople: phenotype variables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+% step1: Geno Copy1
+for i = 1: numPeople 
+    p = pedigree.parents(i, 1);
+    if p == 0 
+        factorList(i) = childCopyGivenFreqsFactor(alleleFreqs, i);
+    else
+        factorList(i) = childCopyGivenParentalsFactor(numAlleles, i, p, p + numPeople);
+    end
+end
+
+for i = numPeople + 1: numPeople * 2 
+    p = pedigree.parents(i - numPeople, 2);
+    if p == 0 
+        factorList(i) = childCopyGivenFreqsFactor(alleleFreqs, i);
+    else
+        factorList(i) = childCopyGivenParentalsFactor(numAlleles, i, p, p + numPeople);
+    end
+end
+
+for i = numPeople * 2 + 1: numPeople * 3 
+    factorList(i) = phenotypeGivenCopiesFactor(alphaList, numAlleles, i - 2 * numPeople, i - numPeople, i);
+end
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
